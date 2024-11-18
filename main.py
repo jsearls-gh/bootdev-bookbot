@@ -1,4 +1,5 @@
 import sys
+import os
 
 def get_contents(file_path):
     with open(file_path) as f:
@@ -32,22 +33,27 @@ def format_character_counts(char_count_dict):
 
     return char_count_list
             
-
-def main(path_to_file):
-    file_contents = get_contents(path_to_file)
-
-    word_count = get_word_count(file_contents)
-    character_counts = format_character_counts(get_character_counts(file_contents))
-
-    print(f"--- Begin report of {path_to_file} ---")
+def print_report(file_path, word_count, character_counts):
+    print(f"--- Begin report of {file_path} ---")
     print(f"{word_count} words found in the document\r\n")
     for char_dict in character_counts:
-        print(f"The '{char_dict["char"]}' character was found {char_dict["char"]} times")
+        print(f"The '{char_dict["char"]}' character was found {char_dict["count"]} times")
     print("--- End report ---")
 
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print("Please provide a valid file path (ex: python main.py books/frankenstein.txt)")
+def main(args):
+    if len(args) == 1:
+        print("Please provide a file path (ex: python main.py books/frankenstein.txt)")
         exit(1)
-    file_path = sys.argv[1]
-    main(file_path)
+    elif not os.path.exists(args[1]):
+        print(f"File not found: {args[1]}")
+        exit(1)
+
+    file_path = args[1]
+    file_contents = get_contents(file_path)
+    word_count = get_word_count(file_contents)
+    character_counts = format_character_counts(get_character_counts(file_contents))
+    
+    print_report(file_path, word_count, character_counts)
+    
+if __name__ == '__main__':
+    main(sys.argv)
