@@ -46,6 +46,8 @@ def main(path_to_file):
     print("--- End report ---")
 
 if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        print("Please provide a valid file path (ex: python main.py books/frankenstein.txt)")
+        exit(1)
     file_path = sys.argv[1]
-    
     main(file_path)
